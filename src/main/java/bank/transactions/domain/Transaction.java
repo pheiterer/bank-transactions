@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Array;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "userKey", referencedColumnName = "id")
-    private User user;
+    private BankUser bankUser;
 
     private Long branchKey;
 

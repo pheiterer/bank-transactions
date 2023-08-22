@@ -13,12 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 
 
@@ -34,22 +30,15 @@ public class TransactionController {
 
     @GetMapping("{accountId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> getTransactionsJson(@PathVariable String accountId,
-                                                      @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<Transaction>> getTransactionsJson(@PathVariable String accountId,
+                                                                 @AuthenticationPrincipal UserDetails userDetails) {
         log.info("find all transactions");
 
 //        if((findUserId(userDetails.getUsername()) != accountId) {
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 //        }
+        return ResponseEntity.ok(transactionService.findAllById(accountId));
 
-            try {
-            File file = ResourceUtils.getFile("classpath:transactions.json");
-            String content = new String(Files.readAllBytes(file.toPath()));
-
-            return ResponseEntity.status(HttpStatus.FOUND).body(content);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error reading file");
-        }
     }
 
     @PostMapping("post")

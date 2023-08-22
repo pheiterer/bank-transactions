@@ -3,13 +3,19 @@ server:
     include-stacktrace: on_param
 
 spring:
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
   datasource:
-    url: jdbc:mysql://localhost:3306/bank?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/bank?&createDatabaseIfNotExist=true
     username: root
     password: root
   jpa:
     hibernate:
       ddl-auto: update
+    defer-datasource-initialization: true
+
   jackson:
     serialization:
       fail-on-empty-beans: false

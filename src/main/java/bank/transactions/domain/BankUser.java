@@ -2,6 +2,7 @@ package bank.transactions.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,6 +25,8 @@ public class BankUser implements UserDetails {
     private String password;
     private String authorities;
 
+    @OneToMany(mappedBy="bankUser")
+    private Set<Transaction> transaction;
 
     public String getId() {
         return this.id;

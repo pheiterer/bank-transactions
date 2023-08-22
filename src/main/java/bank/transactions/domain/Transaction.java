@@ -6,20 +6,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Builder
+@Data
 public class Transaction {
     @Id
-    private Long id;
-    private Long encodedKey;
-    private LocalDateTime creationDate;
-    private LocalDateTime valueDate;
-    private Long parentAccountKey;
+    private String id;
+    private String encodedKey;
+    private String creationDate;
+    private String valueDate;
+    private String parentAccountKey;
     private String type;
     private Double amount;
     private String currencyCode;
@@ -34,54 +34,22 @@ public class Transaction {
     private AccountBalances accountBalances;
 
     @ManyToOne
-    @JoinColumn(name = "userKey", referencedColumnName = "id")
+    @JoinColumn(name = "user_key", nullable=false)
     private BankUser bankUser;
 
-    private Long branchKey;
+    private String branchKey;
 
     @Embedded
     private Terms terms;
 
-    private String transactionDetails;
+    @Embedded
+    private TransactionDetails transactionDetails;
 
     @Embedded
     private TransferDetails transferDetails;
 
     @ElementCollection
     private List<Double> fees;
-}
-
-@Data
-class AffectedAmounts {
-    private Double fundsAmount;
-    private Double interestAmount;
-    private Double feesAmount;
-    private Double overdraftAmount;
-    private Double overdraftFeesAmount;
-    private Double overdraftInterestAmount;
-    private Double technicalOverdraftAmount;
-    private Double technicalOverdraftInterestAmount;
-    private Double fractionAmount;
-}
-
-@Data
-class Taxes {}
-
-@Data
-class AccountBalances{
-    private Double totalBalance;
-}
-
-@Data
-class Terms{
-    private String interestSettings;
-    private String overdraftInterestSettings;
-    private String overdraftSettings;
-}
-
-@Data
-class TransferDetails{
-    private String linkedDepositTransactionKey;
 }
 
 

@@ -25,7 +25,7 @@ public class BankUser implements UserDetails {
     private String password;
     private String authorities;
 
-    @OneToMany(mappedBy="bankUser")
+    @OneToMany(mappedBy = "bankUser")
     private Set<Transaction> transaction;
 
     public String getId() {

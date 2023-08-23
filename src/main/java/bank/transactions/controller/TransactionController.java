@@ -1,9 +1,7 @@
 package bank.transactions.controller;
 
 import bank.transactions.domain.BankUser;
-import bank.transactions.domain.Transaction;
-import bank.transactions.mapper.TransactionMapper;
-import bank.transactions.request.TransactionRequest;
+import bank.transactions.response.TransactionGetResponse;
 import bank.transactions.service.BankUserService;
 import bank.transactions.service.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @RestController
@@ -24,37 +26,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransactionController {
 
-    private final TransactionService transactionService;
     private final BankUserService bankUserService;
+    private final TransactionService transactionService;
 
 
-    @GetMapping("{accountId}")
+    @GetMapping("/{accountId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<Transaction>> getTransactionsJson(@PathVariable String accountId,
-                                                                 @AuthenticationPrincipal UserDetails userDetails) {
-        log.info("find all transactions");
+    public ResponseEntity<List<TransactionGetResponse>> getTransactionsJson(
+            @PathVariable String accountId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        log.info("Find all transactions");
 
-//        if((findUserId(userDetails.getUsername()) != accountId) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-//        }
-        return ResponseEntity.ok(transactionService.findAllById(accountId));
-
-    }
-
-    @PostMapping("post")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<TransactionRequest>> addTransactionsJson(@RequestBody List<TransactionRequest> requests) {
-        log.info("post all transactions");
-        TransactionMapper mapper = new TransactionMapper();
-        for (TransactionRequest transaction:requests) {
-            Transaction transactionToBeSaved = mapper.toTransaction(transaction);
-            BankUser bankUser = this.bankUserService.findUser(transaction.getUserKey());
-            transactionToBeSaved.setBankUser(bankUser);
-            transactionService.save(transactionToBeSaved);
+        BankUser authenticatedUserId = bankUserService.findUserByUsername(userDetails.getUsername());
+        if (!Objects.equals(authenticatedUserId.getId(), accountId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return new ResponseEntity<>(requests, HttpStatus.CREATED);
 
+        List<TransactionGetResponse> transactions = transactionService.findAllByBankUser(authenticatedUserId);
+        return ResponseEntity.ok(transactions);
     }
+
 
 }
 

@@ -1,4 +1,4 @@
-package bank.transactions.domain;
+package bank.transactions.domain.transactions.subclass;
 
 import lombok.Data;
 

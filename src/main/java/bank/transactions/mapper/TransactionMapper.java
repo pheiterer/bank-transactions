@@ -1,65 +1,43 @@
 package bank.transactions.mapper;
 
 
-import bank.transactions.domain.*;
-import bank.transactions.request.*;
+import bank.transactions.domain.Transaction;
+import bank.transactions.response.TransactionGetResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static bank.transactions.response.TransactionGetResponse.CreditDebitIndicator.CREDIT;
+import static bank.transactions.response.TransactionGetResponse.CreditDebitIndicator.DEBIT;
 
 public class TransactionMapper {
 
-    public Transaction toTransaction(TransactionRequest transactionRequest) {
-        return new Transaction(
-                transactionRequest.getId(),
-                transactionRequest.getEncodedKey(),
-                transactionRequest.getCreationDate(),
-                transactionRequest.getValueDate(),
-                transactionRequest.getParentAccountKey(),
-                transactionRequest.getType(),
-                transactionRequest.getAmount(),
-                transactionRequest.getCurrencyCode(),
-                this.toAffectedAmounts(transactionRequest.getAffectedAmounts()),
-                new Taxes(),
-                this.toAccountBalances(transactionRequest.getAccountBalances()),
-                null,
-                transactionRequest.getBranchKey(),
-                this.toTerms(),
-                new TransactionDetails(),
-                this.toTransferDetails(transactionRequest.getTransferDetails()),
-                transactionRequest.getFees()
-                );
-    }
-
-    private AffectedAmounts toAffectedAmounts(AffectedAmountsRequest affectedAmountsRequest) {
-        return new AffectedAmounts(
-                affectedAmountsRequest.getFeesAmount(),
-                affectedAmountsRequest.getFundsAmount(),
-                affectedAmountsRequest.getFractionAmount(),
-                affectedAmountsRequest.getInterestAmount(),
-                affectedAmountsRequest.getOverdraftFeesAmount(),
-                affectedAmountsRequest.getOverdraftAmount(),
-                affectedAmountsRequest.getOverdraftInterestAmount(),
-                affectedAmountsRequest.getTechnicalOverdraftAmount(),
-                affectedAmountsRequest.getTechnicalOverdraftInterestAmount()
+    public TransactionGetResponse toTransactionGetResponse(Transaction transaction) {
+        return new TransactionGetResponse(
+                transaction.getEncodedKey(),
+                transaction.getParentAccountKey(),
+                transaction.getCreationDate(),
+                transaction.getType(),
+                transaction.getValueDate(),
+                transaction.getAmount(),
+                transaction.getCurrencyCode(),
+                transaction.getCurrencyCode(),
+                transaction.getAmount() < 0 ? DEBIT : CREDIT,
+                transaction.getAccountBalances().getTotalBalance(),
+                transaction.getId(),
+                transaction.getParentAccountKey(),
+                transaction.getType(),
+                transaction.getAmount()
         );
     }
 
-    private AccountBalances toAccountBalances(AccountBalancesRequest accountBalanceRequest) {
-        return new AccountBalances(
-                accountBalanceRequest.getTotalBalance()
-        );
-    }
+    public List<TransactionGetResponse> toTransactionGetResponses(List<Transaction> transactions) {
 
-    private Terms toTerms(){
-        return new Terms(
-                new InterestSettings(),
-                new OverdraftInterestSettings(),
-                new OverdraftSettings()
-        );
-    }
+        List<TransactionGetResponse> list = new ArrayList<>(transactions.size());
+        for (Transaction transaction : transactions) {
+            list.add(toTransactionGetResponse(transaction));
+        }
 
-    private TransferDetails toTransferDetails(TransferDetailsRequest transferDetailsRequest){
-        return new TransferDetails(
-                transferDetailsRequest.getLinkedDepositTransactionKey()
-        );
+        return list;
     }
-
 }

@@ -1,5 +1,6 @@
 package bank.transactions.domain;
 
+import bank.transactions.domain.transactions.subclass.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +35,7 @@ public class Transaction {
     private AccountBalances accountBalances;
 
     @ManyToOne
-    @JoinColumn(name = "user_key", nullable=false)
+    @JoinColumn(name = "user_key", nullable = false)
     private BankUser bankUser;
 
     private String branchKey;

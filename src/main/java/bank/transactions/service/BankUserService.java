@@ -11,9 +11,8 @@ public class BankUserService {
 
     private final BankUserRepository bankUserRepository;
 
-    public BankUser findUser(String id){
-        return bankUserRepository.findById(id)
+    public BankUser findUserByUsername(String username) {
+        return bankUserRepository.findBankUserByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not Found"));
     }
-
 }

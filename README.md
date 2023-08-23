@@ -6,7 +6,6 @@
   <a href="#sobre">Sobre</a> •
   <a href="#requisitos">Requisitos</a> •
   <a href="#instalação">Instalação</a> •
-  <a href="#funcionamento">Funcionamento</a> •
   <a href="#testes">Testes</a> •
   <a href="#exam">Sobre  o exame</a>
 </p>
@@ -55,11 +54,6 @@ Abra http://localhost:8080/transactions/`{accountId}` com o Postman para ver o r
 | 8a8587b371776b9e01717d217e6e1492 |   user1  | password1 |
 | 8a85867e6ad9e761016ada958bdf5b0f |   user2  | password2 |
 | 8a8587fd6b0487a7016b07a1ecfb0b74 |   user3  | password3 |
-
-
-## Funcionamento
-
-![ezgif com-video-to-gif](https://github.com/pheiterer/bank-transactions/assets/16851853/97f14d5c-5d07-482a-ba15-575fce91a0f2)
 
 ## Testes
 

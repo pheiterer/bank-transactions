@@ -59,7 +59,7 @@ Abra http://localhost:8080/transactions/`{accountId}` com o Postman para ver o r
 
 ## Funcionamento
 
-![Alt text](intera%C3%A7%C3%A3o.gif)
+![ezgif com-video-to-gif](https://github.com/pheiterer/bank-transactions/assets/16851853/97f14d5c-5d07-482a-ba15-575fce91a0f2)
 
 ## Testes
 
